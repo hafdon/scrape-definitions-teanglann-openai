@@ -1,11 +1,17 @@
 import requests
 from bs4 import BeautifulSoup
 from config.logging import setup_logging
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 
 class WebScraperService:
     def __init__(self):
         self.logger = setup_logging()
+        self.session = requests.Session()
+        retries = Retry(total=3, backoff_factor=1, status_forcelist=[502, 503, 504])
+        self.session.mount("http://", HTTPAdapter(max_retries=retries))
+        self.session.mount("https://", HTTPAdapter(max_retries=retries))
 
     def scrape_definitions(self, url):
         try:
