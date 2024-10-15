@@ -54,6 +54,7 @@ When provided with a detailed word entry, extract and list the **core, primary d
   - Example sentences
   - Redirects to other entries (e.g., `"fís 3 = fithis."`)
   - Definitions that are specific to compound forms of the word (e.g., definitions following compound words like "moille radhairc").
+    - Example: INPUT: `túr 1 , m . ( gs . & npl . túir, gpl . túr ). Tower. túr faire, watch-tower. túr uisce, water-tower.` EXPECTED OUTPUT: `{  "word": "túr",  "noun_definitions": "(I) (1) tower; (2) watch-tower; (3) water-tower.",   "verb_definitions": "",  "adjective_definitions": ""}`
 
 #### **Numbering Definitions**
 
@@ -104,6 +105,7 @@ If you encounter an error or the input does not follow the expected format, add 
 - **Exclusions:**
 
   - Strictly exclude phrases, idioms, examples, variants, and redirect entries from definitions.
+  - Exclude definitions that are specific to compound forms of the word.
 
 - **Review:**
 
