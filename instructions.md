@@ -46,15 +46,15 @@ When provided with a detailed word entry, extract and list the **core, primary d
 
 #### **Extracting Definitions**
 
-- Extract only the **core definitions** from the definition body.
+- Extract the **core definitions** from the definition body.
+  - If you include a compound phrase (two or more words including the headword), the compound phrase should be enclosed in parentheses and placed before the English definition.
+  - Example: `(plúr ruibhe) flowers of sulphur.`
 - Definitions can be **paraphrased** for clarity.
 - **Do not** include:
   - Phrases
   - Idioms
   - Example sentences
   - Redirects to other entries (e.g., `"fís 3 = fithis."`)
-  - Definitions that are specific to compound forms of the word (e.g., definitions following compound words like "moille radhairc").
-    - Example: INPUT: `túr 1 , m . ( gs . & npl . túir, gpl . túr ). Tower. túr faire, watch-tower. túr uisce, water-tower.` EXPECTED OUTPUT: `{  "word": "túr",  "noun_definitions": "(I) (1) tower; (2) watch-tower; (3) water-tower.",   "verb_definitions": "",  "adjective_definitions": ""}`
 
 #### **Numbering Definitions**
 
@@ -70,10 +70,11 @@ When provided with a detailed word entry, extract and list the **core, primary d
 #### **Formatting Definitions**
 
 - Within each numbered group, list definitions separated by semicolons.
+- For compound definitions, include the Irish phrase in parentheses before the English definition.
 - Example:
 
   ```
-  "noun_definitions": "(I) (1) definition one; (2) definition two. (II) (1) definition three."
+  "noun_definitions": "(I) (1) flour; (2) flower; (3) (plúr ruibhe) flowers of sulphur; (4) (plúr carraige) rock flour."
   ```
 
 ---
