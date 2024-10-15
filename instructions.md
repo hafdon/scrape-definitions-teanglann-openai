@@ -11,29 +11,46 @@ When provided with a detailed word entry containing definitions and phrases, ext
 ### **Definition-Specific Instructions**
 
 - **Include Only Core Definitions:**
-  - In the `"noun_definitions"`, `"verb_definitions"`, etc., include only the basic, primary meanings of the word.
-  - **Do not** include phrases, idioms, example sentences, or compound phrases in the definitions.
-  - **Do not** include redirects to other entries (e.g., "fís 3 = fithis.").
+
+  - **Part of Speech Identification:**
+
+    - **Noun Definitions (`"noun_definitions"`):**
+      - Include definitions under this category if the raw entry indicates a noun.
+      - **Do not** include phrases, idioms, example sentences, or redirects.
+
+    - **Verb Definitions (`"verb_definitions"`):**
+      - Include definitions under this category **only if** the raw entry has `"v.t."`, `"v.i."`, or both immediately after the word.
+      - **"v.t."** stands for "transitive verb."
+      - **"v.i."** stands for "intransitive verb."
+      - **Do not** include phrases, idioms, example sentences, or redirects.
+
+    - **Adjective Definitions (`"adjective_definitions"`):**
+      - Include definitions under this category if the raw entry indicates an adjective.
+      - **Do not** include phrases, idioms, example sentences, or redirects.
+
+    - **Other Parts of Speech:**
+      - Add additional fields as necessary based on the part of speech indicated in the raw entry.
 
 - **Numbering Definitions:**
+
   - Numbering should **reset within each part-of-speech category**.
   - Use **Roman numerals (I, II, III, ...)** for each distinct sub-entry within a part of speech.
   - Within each Roman numeral group, list definitions with Arabic numerals `(1)`, `(2)`, etc.
-
-- **Formatting Definitions:**
-  - Within each numbered group, list definitions separated by semicolons.
-  - Example:
-    ```
-    "(I) (1) definition one; (2) definition two. (II) (1) definition three."
-    ```
+  - **Formatting Definitions:**
+    - Within each numbered group, list definitions separated by semicolons.
+    - Example:
+      ```
+      "(I) (1) definition one; (2) definition two. (II) (1) definition three."
+      ```
 
 ---
 
 ### **Handling the "Other" Field**
 
 - **Include Phrases Only If They Meet All Criteria:**
+
   - The phrase is **present in the input**.
-  - The phrase contains one of the specified **support verbs**:
+  - The phrase contains one of the specified **support verbs**.
     - **bí** (be)
     - **déan** (do, make)
     - **faigh** (get, receive)
@@ -60,6 +77,7 @@ When provided with a detailed word entry containing definitions and phrases, ext
     - **tuiscint** (understand)
 
 - **Formatting Phrases:**
+
   - Include the support verb in square brackets at the front of the item.
   - Format: `"(RomanNumeral-DefinitionIndex) [support verb] phrase (translation)"`
   - Example:
@@ -68,6 +86,7 @@ When provided with a detailed word entry containing definitions and phrases, ext
     ```
 
 - **Do Not Include:**
+
   - Phrases without support verbs.
   - Phrases not present in the input.
   - Redirect entries.
