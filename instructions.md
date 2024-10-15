@@ -53,6 +53,7 @@ When provided with a detailed word entry, extract and list the **core, primary d
   - Idioms
   - Example sentences
   - Redirects to other entries (e.g., `"fís 3 = fithis."`)
+  - Definitions that are specific to compound forms of the word (e.g., definitions following compound words like "moille radhairc").
 
 #### **Numbering Definitions**
 
@@ -73,6 +74,7 @@ When provided with a detailed word entry, extract and list the **core, primary d
   ```
   "noun_definitions": "(I) (1) definition one; (2) definition two. (II) (1) definition three."
   ```
+
 ---
 
 ### **Error Handling Instructions**
