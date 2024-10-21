@@ -77,7 +77,7 @@ class OpenAIService:
     def _strip_code_blocks(self, content: str):
         # Remove code block markers if present
         if content.startswith("```json") and content.endswith("```"):
-            content = content[6:-3].strip()
+            content = content[7:-3].strip()
         return content
 
     def _extract_definitions(self, structured_data):
