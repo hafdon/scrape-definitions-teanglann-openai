@@ -26,7 +26,7 @@
    - Place any remaining parts of speech under `"other_definitions"`.
 
 5. **Format the JSON Object**:
-   - Use the following structure:
+   - Use the following structure (Do not include the backticks or the word `json`)
      ```json
      {
        "word": "<WORD>",
@@ -56,6 +56,8 @@ trácht6, v.t. & i. (pp. ~a). 1. (With ar) Mention. ~ ar rud, to mention sth. Ó
 ---
 
 #### **OUTPUT**:
+NOTE: (Do not include the backticks or the word `json`)
+
 ```json
 {
   "word": "trácht",
