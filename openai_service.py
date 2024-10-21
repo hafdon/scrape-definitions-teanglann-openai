@@ -39,18 +39,43 @@ class OpenAIService:
             adjectives = structured_data.get("adjective_definitions", "")
             verbs = structured_data.get("verb_definitions", "")
             nouns = structured_data.get("noun_definitions", "")
-            other = structured_data.get("other", "")
+            other = structured_data.get("other_definitions", "")
             error = structured_data.get("error")
 
             if error:
                 self.logger.info(f"OpenAI Self-Reported Error: {error}")
 
             return (adjectives, verbs, nouns, other)
-            pass
         except json.JSONDecodeError as jde:
             self.logger.error(f"JSON decoding failed {jde}")
             self.logger.debug(f"Received content {content}")
-            return None
+
+            # Step 1: Split the response into lines
+            lines = structured_data.strip().split("\n")
+
+            # Step 2: Remove the first and last lines (the backticks)
+            json_lines = lines[1:-1]
+
+            # Step 3: Join the remaining lines back into a single string
+            json_str = "\n".join(json_lines)
+
+            # Step 4: Parse the JSON string into a Python dictionary
+            data = json.loads(json_str)
+
+            # Now, `data` is a Python dictionary
+            print(data)
+
+            adjectives = data.get("adjective_definitions", "")
+            verbs = data.get("verb_definitions", "")
+            nouns = data.get("noun_definitions", "")
+            other = data.get("other_definitions", "")
+            error = data.get("error")
+
+            if error:
+                self.logger.info(f"OpenAI Self-Reported Error: {error}")
+
+            return (adjectives, verbs, nouns, other)
+
         except Exception as e:
             self.logger.error(f"Error with OpenAI API: {e}")
             return None
