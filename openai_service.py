@@ -8,7 +8,7 @@ class OpenAIService:
         """
         Sets up logging.
         Initializes the OpenAI client.
-        Stores configuration
+        Stores configuration.
         """
         self.logger = setup_logging()
         self.client = OpenAI()
@@ -22,7 +22,6 @@ class OpenAIService:
         Logs relevant information.
         """
         try:
-
             completion = self.client.chat.completions.create(
                 model=self.model,
                 messages=self._build_message(definition, instructions),
@@ -32,49 +31,9 @@ class OpenAIService:
             content = completion.choices[0].message.content.strip()
             self.logger.debug(f"Raw OpenAI Response: {content}")
 
-            # Parse the JSON response
-            structured_data = json.loads(content)
-            self.logger.debug(f"Structured Data: {structured_data}")
+            structured_data = self._parse_content(content)
 
-            adjectives = structured_data.get("adjective_definitions", "")
-            verbs = structured_data.get("verb_definitions", "")
-            nouns = structured_data.get("noun_definitions", "")
-            other = structured_data.get("other_definitions", "")
-            error = structured_data.get("error")
-
-            if error:
-                self.logger.info(f"OpenAI Self-Reported Error: {error}")
-
-            return (adjectives, verbs, nouns, other)
-        except json.JSONDecodeError as jde:
-            self.logger.error(f"JSON decoding failed {jde}")
-            self.logger.debug(f"Received content {content}")
-
-            # Step 1: Split the response into lines
-            lines = structured_data.strip().split("\n")
-
-            # Step 2: Remove the first and last lines (the backticks)
-            json_lines = lines[1:-1]
-
-            # Step 3: Join the remaining lines back into a single string
-            json_str = "\n".join(json_lines)
-
-            # Step 4: Parse the JSON string into a Python dictionary
-            data = json.loads(json_str)
-
-            # Now, `data` is a Python dictionary
-            print(data)
-
-            adjectives = data.get("adjective_definitions", "")
-            verbs = data.get("verb_definitions", "")
-            nouns = data.get("noun_definitions", "")
-            other = data.get("other_definitions", "")
-            error = data.get("error")
-
-            if error:
-                self.logger.info(f"OpenAI Self-Reported Error: {error}")
-
-            return (adjectives, verbs, nouns, other)
+            return self._extract_definitions(structured_data)
 
         except Exception as e:
             self.logger.error(f"Error with OpenAI API: {e}")
@@ -90,3 +49,45 @@ class OpenAIService:
             {"role": "system", "content": instructions},
             user_message,
         ]
+
+    def _parse_content(self, content: str):
+        try:
+            structured_data = json.loads(content)
+            self.logger.debug(f"Structured Data: {structured_data}")
+            return structured_data
+        except json.JSONDecodeError as jde:
+            self.logger.error(f"JSON decoding failed: {jde}")
+            self.logger.debug("Attempting to reprocess content.")
+            self.logger.debug(f"Received content: {content}")
+
+            # Attempt to reprocess content by stripping code blocks
+            content = self._strip_code_blocks(content)
+
+            try:
+                structured_data = json.loads(content)
+                self.logger.debug(
+                    f"Structured Data after reprocessing: {structured_data}"
+                )
+                return structured_data
+            except json.JSONDecodeError as jde2:
+                self.logger.error(f"Reprocessing failed: {jde2}")
+                self.logger.debug(f"Final received content: {content}")
+                raise  # Re-raise exception to be caught in higher level
+
+    def _strip_code_blocks(self, content: str):
+        # Remove code block markers if present
+        if content.startswith("```json") and content.endswith("```"):
+            content = content[6:-3].strip()
+        return content
+
+    def _extract_definitions(self, structured_data):
+        adjectives = structured_data.get("adjective_definitions", "")
+        verbs = structured_data.get("verb_definitions", "")
+        nouns = structured_data.get("noun_definitions", "")
+        other = structured_data.get("other_definitions", "")
+        error = structured_data.get("error")
+
+        if error:
+            self.logger.info(f"OpenAI Self-Reported Error: {error}")
+
+        return adjectives, verbs, nouns, other
