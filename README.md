@@ -60,23 +60,6 @@ Defined in [`utils/openai/get_overview_definition.py`](utils/openai/get_overview
 
 Defined in [`utils/teanglann/scrape_definitions.py`](utils/teanglann/scrape_definitions.py), this function scrapes definitions from a specified URL using BeautifulSoup.
 
-## Contributing
-
-1. **Fork the repository.**
-2. **Create a new branch:**
-    ```sh
-    git checkout -b feature-branch
-    ```
-3. **Make your changes and commit them:**
-    ```sh
-    git commit -m 'Add some feature'
-    ```
-4. **Push to the branch:**
-    ```sh
-    git push origin feature-branch
-    ```
-5. **Create a pull request.**
-
 ## License
 
 This project is licensed under the MIT License.

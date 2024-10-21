@@ -13,10 +13,10 @@ class WebScraperService:
         self.session.mount("http://", HTTPAdapter(max_retries=retries))
         self.session.mount("https://", HTTPAdapter(max_retries=retries))
 
-    def scrape_definitions(self, url):
+    def scrape_definitions(self, url: str, word: str) -> str:
         try:
 
-            response = requests.get(url)
+            response = self.session.get(url)
             if response.status_code != 200:
                 self.logger.error(
                     f"Failed to retrieve {url}. Status code: {response.status_code}"
@@ -34,9 +34,15 @@ class WebScraperService:
                 entry.get_text(separator=" ", strip=True) for entry in entries
             ]
             full_definition = "\n\n".join(definitions)
-            self.logger.debug(f"Extracted definitions: {full_definition}")
 
-            return full_definition
+            # de-anaphorize text
+            # (i.e. replace all instances of "~" in the definiition with the headword)
+            pattern = "~"
+            # Perform the substitution
+            regexed_definition = full_definition.replace(pattern, word)
+            self.logger.debug(f"Extracted definitions: {regexed_definition}")
+
+            return regexed_definition
         except requests.RequestException as re:
             self.logger.error(f"Request failed for {url}: {re}")
             return None

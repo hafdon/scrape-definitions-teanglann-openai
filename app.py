@@ -1,4 +1,5 @@
 import csv
+import os
 
 from config.logging import setup_logging
 
@@ -11,9 +12,31 @@ from web_scraper_service import WebScraperService
 logger = setup_logging()
 
 
+def read_markdown_file(file_path):
+    """
+    Reads the content of a Markdown file and returns it as a string.
+
+    Args:
+        file_path (str): The path to the Markdown file.
+
+    Returns:
+        str: The content of the file.
+    """
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+            markdown_content = file.read()
+        return markdown_content
+    except FileNotFoundError:
+        print(f"Error: The file {file_path} was not found.")
+        return None
+    except Exception as e:
+        print(f"An error occurred while reading the file: {e}")
+        return None
+
+
 def main():
 
-    openai_service = OpenAIService()
+    openai_service = OpenAIService(model="gpt-4o-mini", max_tokens=1000)
     web_scraper_service = WebScraperService()
 
     base_url = "https://www.teanglann.ie/en/fgb"
@@ -44,13 +67,17 @@ def main():
         for word, url in zip(words, urls):
             try:
                 logger.info(f"Processing word: {word}")
-                definition = web_scraper_service.scrape_definitions(url)
+                definition = web_scraper_service.scrape_definitions(url, word)
                 if not definition:
                     logger.warning(f"Skipping word '{word}' due to extraction failure.")
                     continue
 
+                instructions = read_markdown_file("instructions.md")
+
                 # Ensure get_overview_definition returns a tuple
-                overview = openai_service.get_overview_definition(definition)
+                overview = openai_service.get_overview_definition(
+                    definition, instructions
+                )
                 if not overview:
                     logger.warning(
                         f"Skipping word '{word}' because get_overview_definition returned None."
